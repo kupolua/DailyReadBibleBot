@@ -1,57 +1,58 @@
-var utf8 = require('utf8');
 var cron = require('node-cron');
-var request = require('request');
-var Bible2years = require('./Bible2years.json');
-var getReadingPlanMap = require('./getReadingPlanMap');
-var getDayNumber = require('./getDayNumber');
-var BibleMap = require('./JsonToMapConverter');
-var now = new Date();
-var getBibleLink = require('./getDayPlanLink');
-var dayNumber;
-var readingPlanMap;
-var dailyReadingPlan;
-var BibleText = '';
-var BibleLink = '';
 
-if(now.getFullYear().toString() === Bible2years.years[0]) {
-    dayNumber = Math.floor(getDayNumber);
-}
+cron.schedule('33 20 * * *', function(){
+    var utf8 = require('utf8');
+    var request = require('request');
+    var Bible2years = require('./Bible2years.json');
+    var getReadingPlanMap = require('./getReadingPlanMap');
+    var getDayNumber = require('./getDayNumber');
+    var BibleMap = require('./JsonToMapConverter');
+    var now = new Date();
+    var getBibleLink = require('./getDayPlanLink');
+    var dayNumber;
+    var readingPlanMap;
+    var dailyReadingPlan;
+    var BibleText = '';
+    var BibleLink = '';
 
-if(now.getFullYear().toString() === Bible2years.years[1]) {
-    dayNumber = Math.floor(getDayNumber) + 365;
-}
+    if(now.getFullYear().toString() === Bible2years.years[0]) {
+        dayNumber = Math.floor(getDayNumber);
+    }
 
-if(dayNumber) {
-    readingPlanMap = getReadingPlanMap(Bible2years.plan);
+    if(now.getFullYear().toString() === Bible2years.years[1]) {
+        dayNumber = Math.floor(getDayNumber) + 365;
+    }
 
-    dailyReadingPlan = readingPlanMap.get(dayNumber.toString());
+    if(dayNumber) {
+        readingPlanMap = getReadingPlanMap(Bible2years.plan);
 
-    dailyReadingPlan.map((plan) => {
-        for(var bookID in plan) {
-            var book = BibleMap.get(bookID);
+        dailyReadingPlan = readingPlanMap.get(dayNumber.toString());
 
-            plan[bookID].map((chapterID) => {
-                var chapter = book.get(chapterID);
+        dailyReadingPlan.map((plan) => {
+            for(var bookID in plan) {
+                var book = BibleMap.get(bookID);
 
-                BibleText += 'Глава ' + chapterID + '\n';
+                plan[bookID].map((chapterID) => {
+                    var chapter = book.get(chapterID);
 
-                for(var i = 1; i < chapter.size; i++) {
-                    BibleText += i + ' ' + chapter.get(i.toString()) + '\n';
-                }
+                    BibleText += 'Глава ' + chapterID + '\n';
 
-                BibleText += '\n'
-            });
-        }
-    });
+                    for(var i = 1; i < chapter.size; i++) {
+                        BibleText += i + ' ' + chapter.get(i.toString()) + '\n';
+                    }
 
-    BibleLink = getBibleLink(dailyReadingPlan);
-} else {
-    BibleText = 'План чтения на ' + Bible2years.years[0] + '/' + Bible2years.years[1] + ' гг.'
-}
+                    BibleText += '\n'
+                });
+            }
+        });
 
-console.log(BibleText);
-console.log(BibleLink);
+        BibleLink = getBibleLink(dailyReadingPlan);
+    } else {
+        BibleText = 'План чтения на ' + Bible2years.years[0] + '/' + Bible2years.years[1] + ' гг.'
+    }
 
-// cron.schedule('35 19 * * *', function(){
-//     request('https://api.telegram.org/bot487404455:AAFhJLu40DnzAElC7zXfM1hHG1e-14VpsDM/sendMessage?chat_id=-297700668&text=' + utf8.encode(BibleLink + '\n' + BibleText));
-// });
+    console.log(BibleText);
+    console.log(BibleLink);
+
+    // request('https://api.telegram.org/bot487404455:AAFhJLu40DnzAElC7zXfM1hHG1e-14VpsDM/sendMessage?chat_id=-297700668&text=' + utf8.encode(BibleLink + '\n' + BibleText));
+});
