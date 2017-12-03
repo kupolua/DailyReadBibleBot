@@ -1,4 +1,5 @@
 var cron = require('node-cron');
+var sleep = require('sleep');
 
 cron.schedule('0 6 * * *', function(){
     const OUTRUNNING_DAYS = 29;
@@ -80,9 +81,9 @@ cron.schedule('0 6 * * *', function(){
 
     if(chaptersRequestList.length > 0) {
         chaptersRequestList.forEach((chapter) => {
-            setTimeout( function() {
-                request(requestURL + utf8.encode(chapter));
-            }, 500)
+            request(requestURL + utf8.encode(chapter));
+
+            sleep.sleep(3);
         });
     }
 });
