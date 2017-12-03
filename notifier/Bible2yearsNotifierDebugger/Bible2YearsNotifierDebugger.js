@@ -1,6 +1,10 @@
 var cron = require('node-cron');
 
-cron.schedule('33 20 * * *', function(){
+cron.schedule('0 6 * * *', function(){
+    const OUTRUNNING_DAYS = 29;
+    const TEXT_MAX_LENGTH = 3900;
+    const CHAT_ID = '-297700668';
+    const requestURL = 'https://api.telegram.org/bot487404455:AAFhJLu40DnzAElC7zXfM1hHG1e-14VpsDM/sendMessage?chat_id=' + CHAT_ID + '&text=';
     var utf8 = require('utf8');
     var request = require('request');
     var Bible2years = require('./Bible2years.json');
@@ -14,11 +18,11 @@ cron.schedule('33 20 * * *', function(){
     var dailyReadingPlan;
     var BibleText = '';
     var BibleLink = '';
-    const outrunningDays = 29;
+    var chaptersRequestList = [];
     var DebugMessage = 'Проверяем тексты за ';
 
     // if(now.getFullYear().toString() === Bible2years.years[0]) { //Disabled for debug mode
-        dayNumber = Math.abs(365 - (Math.floor(getDayNumber) + outrunningDays));
+        dayNumber = Math.abs(365 - (Math.floor(getDayNumber) + OUTRUNNING_DAYS));
     // }
 
     var newDay = new Date(2018, 0, 0).getTime();
@@ -29,7 +33,7 @@ cron.schedule('33 20 * * *', function(){
     DebugMessage += outrunningDay.getDate() + '/' + (outrunningDay.getMonth() + 1) + '/' + outrunningDay.getFullYear() + '\n';
 
     if(now.getFullYear().toString() === Bible2years.years[1]) {
-        dayNumber = Math.abs(365 - (Math.floor(getDayNumber) + outrunningDays)) + 365;
+        dayNumber = Math.abs(365 - (Math.floor(getDayNumber) + OUTRUNNING_DAYS)) + 365;
     }
 
     if(dayNumber) {
@@ -50,19 +54,35 @@ cron.schedule('33 20 * * *', function(){
                         BibleText += i + ' ' + chapter.get(i.toString()) + '\n';
                     }
 
-                    BibleText += '\n'
+                    BibleText += '\n';
+
+                    if(BibleText.length > TEXT_MAX_LENGTH) {
+                        DebugMessage = 'Длина главы ' + chapterID + ' составляет '  + BibleText.length + ' cимволов.';
+                    } else {
+                        chaptersRequestList[chaptersRequestList.length] = BibleText;
+                    }
+
+                    BibleText = '';
                 });
             }
         });
 
         BibleLink = getBibleLink(dailyReadingPlan);
     } else {
-        BibleText = 'План чтения на ' + Bible2years.years[0] + '/' + Bible2years.years[1] + ' гг.'
+        DebugMessage = 'План чтения на ' + Bible2years.years[0] + '/' + Bible2years.years[1] + ' гг.'
     }
 
     // console.log(DebugMessage);
     // console.log(BibleLink);
-    // console.log(BibleText);
+    var textMessage = utf8.encode(DebugMessage + '\n' + BibleLink + '\n');
 
-    request('https://api.telegram.org/bot487404455:AAFhJLu40DnzAElC7zXfM1hHG1e-14VpsDM/sendMessage?chat_id=-297700668&text=' + utf8.encode(DebugMessage + '\n' + BibleLink + '\n' + BibleText));
+    request(requestURL + textMessage);
+
+    if(chaptersRequestList.length > 0) {
+        chaptersRequestList.forEach((chapter) => {
+            setTimeout( function() {
+                request(requestURL + utf8.encode(chapter));
+            }, 500)
+        });
+    }
 });
