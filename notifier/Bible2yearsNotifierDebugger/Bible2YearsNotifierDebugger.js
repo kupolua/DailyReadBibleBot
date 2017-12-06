@@ -79,6 +79,8 @@ cron.schedule('0 6 * * *', function(){
 
     request(requestURL + textMessage);
 
+    sleep.sleep(3);
+
     if(chaptersRequestList.length > 0) {
         chaptersRequestList.forEach((chapter) => {
             request(requestURL + utf8.encode(chapter));
