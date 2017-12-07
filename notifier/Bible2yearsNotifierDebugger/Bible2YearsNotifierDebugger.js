@@ -4,7 +4,7 @@ var sleep = require('sleep');
 cron.schedule('0 6 * * *', function(){
     const OUTRUNNING_DAYS = 29;
     const TEXT_MAX_LENGTH = 3900;
-    const CHAT_ID = '-297700668';
+    const CHAT_ID = '-1001295262074';
     const requestURL = 'https://api.telegram.org/bot487404455:AAFhJLu40DnzAElC7zXfM1hHG1e-14VpsDM/sendMessage?chat_id=' + CHAT_ID + '&text=';
     var utf8 = require('utf8');
     var request = require('request');
