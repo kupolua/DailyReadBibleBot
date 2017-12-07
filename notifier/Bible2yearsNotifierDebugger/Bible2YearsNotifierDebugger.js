@@ -4,6 +4,7 @@ var sleep = require('sleep');
 cron.schedule('0 6 * * *', function(){
     const OUTRUNNING_DAYS = 29;
     const TEXT_MAX_LENGTH = 3900;
+    // const CHAT_ID = '356584956'; //my personal chat with bot
     const CHAT_ID = '-1001295262074';
     const requestURL = 'https://api.telegram.org/bot487404455:AAFhJLu40DnzAElC7zXfM1hHG1e-14VpsDM/sendMessage?chat_id=' + CHAT_ID + '&text=';
     var utf8 = require('utf8');
@@ -77,15 +78,13 @@ cron.schedule('0 6 * * *', function(){
     // console.log(BibleLink);
     var textMessage = utf8.encode(DebugMessage + '\n' + BibleLink + '\n');
 
-    request(requestURL + textMessage);
-
-    sleep.sleep(3);
-
-    if(chaptersRequestList.length > 0) {
-        chaptersRequestList.forEach((chapter) => {
-            request(requestURL + utf8.encode(chapter));
-
-            sleep.sleep(3);
-        });
-    }
+    request(requestURL + textMessage)
+        .on('response', function(response) {
+            (function loop(i, chaptersRequestListLength, chaptersRequestList, requestURL) {
+                if (i < chaptersRequestListLength) new Promise(resolve => {
+                    request(requestURL + utf8.encode(chaptersRequestList[i]));
+                    setTimeout(resolve, 3000);
+                }).then(loop.bind(null, i+1, chaptersRequestListLength, chaptersRequestList, requestURL));
+            })(0, chaptersRequestList.length, chaptersRequestList, requestURL);
+    });
 });
