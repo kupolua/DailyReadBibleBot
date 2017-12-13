@@ -6,7 +6,7 @@ cron.schedule('0 6 * * *', function(){
     const TEXT_MAX_LENGTH = 3900;
     // const CHAT_ID = '356584956'; //my personal chat with bot
     const CHAT_ID = '-1001295262074';
-    const requestURL = 'https://api.telegram.org/bot487404455:AAFhJLu40DnzAElC7zXfM1hHG1e-14VpsDM/sendMessage?chat_id=' + CHAT_ID + '&text=';
+    const requestURL = 'https://api.telegram.org/bot499291228:AAHubvjndSbgxax0PauFpAsmy4XYFz9xRTI/sendMessage?chat_id=' + CHAT_ID + '&text=';
     var utf8 = require('utf8');
     var request = require('request');
     var BibleOneYearNewTestamentPlan = require('./BibleOneYearNewTestamentPlan.json');
