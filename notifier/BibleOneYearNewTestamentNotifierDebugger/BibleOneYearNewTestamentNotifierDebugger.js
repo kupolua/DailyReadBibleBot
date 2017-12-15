@@ -1,8 +1,8 @@
 var cron = require('node-cron');
 var sleep = require('sleep');
 
-cron.schedule('0 6 * * *', function(){
-    const OUTRUNNING_DAYS = 18; // (49) whole chapter; (57) two chapters with verses scope; (79) one chapter with verses scope;
+// cron.schedule('0 6 * * *', function(){
+    const OUTRUNNING_DAYS = 17; // (49) whole chapter; (57) two chapters with verses scope; (79) one chapter with verses scope;
     const TEXT_MAX_LENGTH = 3900;
     // const CHAT_ID = '356584956'; //my personal chat with bot
     const CHAT_ID = '-1001295262074';
@@ -33,6 +33,7 @@ cron.schedule('0 6 * * *', function(){
     DebugMessage += outrunningDay.getDate() + '/' + (outrunningDay.getMonth() + 1) + '/' + outrunningDay.getFullYear() + '\n';
 
     function getBibleText(book, chapterID, verses) {
+        // console.log(book);
         var chapter = book.get(chapterID);
 
         BibleText += '\nГлава ' + chapterID + '\n';
@@ -85,13 +86,15 @@ cron.schedule('0 6 * * *', function(){
 
     var textMessage = utf8.encode(DebugMessage + '\n' + BibleLink + '\n');
 
-    request(requestURL + textMessage)
-        .on('response', function(response) {
-            (function loop(i, chaptersRequestListLength, chaptersRequestList, requestURL) {
-                if (i < chaptersRequestListLength) new Promise(resolve => {
-                    request(requestURL + utf8.encode(chaptersRequestList[i]));
-                    setTimeout(resolve, 3000);
-                }).then(loop.bind(null, i+1, chaptersRequestListLength, chaptersRequestList, requestURL));
-            })(0, chaptersRequestList.length, chaptersRequestList, requestURL);
-    });
-});
+    console.log(DebugMessage + '\n' + BibleLink + '\n' + '\n' + chaptersRequestList);
+
+    // request(requestURL + textMessage)
+    //     .on('response', function(response) {
+    //         (function loop(i, chaptersRequestListLength, chaptersRequestList, requestURL) {
+    //             if (i < chaptersRequestListLength) new Promise(resolve => {
+    //                 request(requestURL + utf8.encode(chaptersRequestList[i]));
+    //                 setTimeout(resolve, 3000);
+    //             }).then(loop.bind(null, i+1, chaptersRequestListLength, chaptersRequestList, requestURL));
+    //         })(0, chaptersRequestList.length, chaptersRequestList, requestURL);
+    // });
+// });
