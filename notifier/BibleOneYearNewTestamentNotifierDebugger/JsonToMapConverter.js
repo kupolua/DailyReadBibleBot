@@ -1,4 +1,4 @@
-var BibleJson = require('./synodal.json');
+var BibleJson = require('./ukraine.json');
 var BibleAbbreviationMap = require('./BibleAbbreviationMap');
 var ChaptersMap = new Map();
 var VersesMap = new Map();

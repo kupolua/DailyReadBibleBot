@@ -1,7 +1,3 @@
-var cron = require('node-cron');
-var sleep = require('sleep');
-
-cron.schedule('0 6 * * *', function(){
     const OUTRUNNING_DAYS = 16; // (49) whole chapter; (57) two chapters with verses scope; (79) one chapter with verses scope;
     const TEXT_MAX_LENGTH = 3900;
     // const CHAT_ID = '356584956'; //my personal chat with bot
@@ -21,7 +17,7 @@ cron.schedule('0 6 * * *', function(){
     var BibleText = '';
     var BibleLink = '';
     var chaptersRequestList = [];
-    var DebugMessage = 'Проверяем тексты за ';
+    var DebugMessage = 'Перевіряємо тексти за ';
 
     dayNumber = Math.abs(365 - (Math.floor(getDayNumber) + OUTRUNNING_DAYS));
 
@@ -31,12 +27,13 @@ cron.schedule('0 6 * * *', function(){
     var outrunningDay = new Date(outrunningDayTimestamp);
 
     DebugMessage += outrunningDay.getDate() + '/' + (outrunningDay.getMonth() + 1) + '/' + outrunningDay.getFullYear() + '\n';
+    console.log(DebugMessage);
 
     function getBibleText(book, chapterID, verses) {
         // console.log(book);
         var chapter = book.get(chapterID);
 
-        BibleText += '\nГлава ' + chapterID + '\n';
+        BibleText += '\nРозділ ' + chapterID + '\n';
 
         if(verses) {
             verses[chapterID].forEach((verse) => {
@@ -81,7 +78,7 @@ cron.schedule('0 6 * * *', function(){
 
         BibleLink = getBibleLink(dailyReadingPlan);
     } else {
-        DebugMessage = 'План чтения на 2018 г.'
+        DebugMessage = 'Читання Біблії у 2018 р.'
     }
 
     var textMessage = utf8.encode(DebugMessage + '\n' + BibleLink + '\n');
@@ -97,4 +94,3 @@ cron.schedule('0 6 * * *', function(){
                 }).then(loop.bind(null, i+1, chaptersRequestListLength, chaptersRequestList, requestURL));
             })(0, chaptersRequestList.length, chaptersRequestList, requestURL);
     });
-});
