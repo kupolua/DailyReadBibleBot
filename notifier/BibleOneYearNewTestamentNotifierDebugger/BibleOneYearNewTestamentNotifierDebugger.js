@@ -27,7 +27,6 @@
     var outrunningDay = new Date(outrunningDayTimestamp);
 
     DebugMessage += outrunningDay.getDate() + '/' + (outrunningDay.getMonth() + 1) + '/' + outrunningDay.getFullYear() + '\n';
-    console.log(DebugMessage);
 
     function getBibleText(book, chapterID, verses) {
         // console.log(book);

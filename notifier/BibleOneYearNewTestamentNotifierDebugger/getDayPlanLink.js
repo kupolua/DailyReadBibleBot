@@ -1,3 +1,5 @@
+var BibleAbbreviationMap = require('./BibleAbbreviationMap');
+
 var getDailyPlan = function(dailyPlanJson) {
     var dailyPlan = '';
     let cntBooks = 1;
@@ -5,9 +7,13 @@ var getDailyPlan = function(dailyPlanJson) {
     for(var key in dailyPlanJson) {
         if (dailyPlanJson.hasOwnProperty(key)) {
             let book = dailyPlanJson[key];
-            
+
             for(var k in book) {
-                dailyPlan += k + ' ';
+                BibleAbbreviationMap.forEach((abbr) => {
+                    if(abbr[1] == k) {
+                        dailyPlan += abbr[2] + ' ';
+                    }
+                });
 
                 book[k].forEach((chapter, i) => {
                     if(typeof chapter === 'object') {
