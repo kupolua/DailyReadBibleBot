@@ -3,7 +3,8 @@
     const requestURL = 'https://api.telegram.org/bot487404455:AAFhJLu40DnzAElC7zXfM1hHG1e-14VpsDM/sendMessage?chat_id=' + CHAT_ID + '&text=';
     var utf8 = require('utf8');
     var request = require('request');
-    var BibleOneYearNewTestamentPlan = require('./BibleChronologyPlan.json');
+    var BibleAbbreviationMap = require('./BibleAbbreviationMap');
+    var BibleChronologyPlan = require('./BibleChronologyPlan.json');
     var getReadingPlanMap = require('./getReadingPlanMap');
     var dayNumber = require('./getDayNumber');
     var BibleMap = require('./JsonToMapConverter');
@@ -45,13 +46,18 @@
     }
 
     if(dayNumber) {
-        readingPlanMap = getReadingPlanMap(BibleOneYearNewTestamentPlan);
+        readingPlanMap = getReadingPlanMap(BibleChronologyPlan);
 
         dailyReadingPlan = readingPlanMap.get(dayNumber.toString());
-
+        
         dailyReadingPlan.map((plan) => {
             for(var bookID in plan) {
-                var book = BibleMap.get(bookID);
+                var book;
+                BibleAbbreviationMap.forEach((abbr) => {
+                    if(abbr[0].startsWith(bookID.substr(0, 3))) {
+                        book = BibleMap.get(abbr[1]);
+                    }
+                });
 
                 plan[bookID].map((chapter) => {
                     if(typeof chapter === 'object' && !Array.isArray(chapter)) {
@@ -73,5 +79,6 @@
     var textMessage = utf8.encode(DebugMessage + '\n' + BibleLink + '\n');
 
     // console.log(textMessage);
+    // console.log(BibleLink);
 
     request(requestURL + textMessage);
