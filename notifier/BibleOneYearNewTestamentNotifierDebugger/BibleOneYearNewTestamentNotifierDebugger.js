@@ -1,4 +1,4 @@
-    const OUTRUNNING_DAYS = 0; // (49) whole chapter; (57) two chapters with verses scope; (79) one chapter with verses scope;
+    const OUTRUNNING_DAYS = 1; // (49) whole chapter; (57) two chapters with verses scope; (79) one chapter with verses scope;
     const TEXT_MAX_LENGTH = 3900;
     // const CHAT_ID = '356584956'; //my personal chat with bot
     const CHAT_ID = '-1001295262074';
@@ -40,7 +40,7 @@
                 BibleText += verse + ' ' + chapter.get(verse) + '\n';
             })
         } else {
-            for(var i = 1; i < chapter.size; i++) {
+            for(var i = 1; i <= chapter.size; i++) {
                 BibleText += i + ' ' + chapter.get(i.toString()) + '\n';
             }
         }

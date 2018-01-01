@@ -28,7 +28,7 @@
                 BibleText += verse + ' ' + chapter.get(verse) + '\n';
             })
         } else {
-            for(var i = 1; i < chapter.size; i++) {
+            for(var i = 1; i <= chapter.size; i++) {
                 BibleText += i + ' ' + chapter.get(i.toString()) + '\n';
             }
         }
