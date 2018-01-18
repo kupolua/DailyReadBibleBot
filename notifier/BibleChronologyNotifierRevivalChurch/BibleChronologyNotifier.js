@@ -1,5 +1,6 @@
     const TEXT_MAX_LENGTH = 3900;
-    const CHAT_ID = '-1001160020446'; //https://t.me/ChurchRevival
+    const CHAT_ID = '356584956'; //https://t.me/ChurchRevival
+    // const CHAT_ID = '-1001160020446'; //https://t.me/ChurchRevival
     const requestURL = 'https://api.telegram.org/bot487404455:AAFhJLu40DnzAElC7zXfM1hHG1e-14VpsDM/sendMessage?chat_id=' + CHAT_ID + '&text=';
     var utf8 = require('utf8');
     var request = require('request');
@@ -59,15 +60,15 @@
                     }
                 });
 
-                plan[bookID].map((chapter) => {
-                    if(typeof chapter === 'object' && !Array.isArray(chapter)) {
-                        for(var chapterID in chapter) {
-                            getBibleText(bookID, book, chapterID, chapter);
-                        }
-                    } else {
-                        getBibleText(bookID, book, chapter[0])
-                    }
-                });
+                // plan[bookID].map((chapter) => {
+                //     if(typeof chapter === 'object' && !Array.isArray(chapter)) {
+                //         for(var chapterID in chapter) {
+                //             getBibleText(bookID, book, chapterID, chapter);
+                //         }
+                //     } else {
+                //         getBibleText(bookID, book, chapter[0])
+                //     }
+                // });
             }
         });
 
@@ -78,7 +79,7 @@
 
     var textMessage = utf8.encode(DebugMessage + '\n' + BibleLink + '\n');
 
-    // console.log(textMessage);
+    // console.log(DebugMessage + '\n' + BibleLink + '\n');
     // console.log(BibleLink);
 
     request(requestURL + textMessage);
