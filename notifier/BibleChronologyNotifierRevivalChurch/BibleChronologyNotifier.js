@@ -1,6 +1,6 @@
     const TEXT_MAX_LENGTH = 3900;
-    const CHAT_ID = '356584956'; //https://t.me/ChurchRevival
-    // const CHAT_ID = '-1001160020446'; //https://t.me/ChurchRevival
+    //const CHAT_ID = '356584956'; //https://t.me/ChurchRevival
+    const CHAT_ID = '-1001160020446'; //https://t.me/ChurchRevival
     const requestURL = 'https://api.telegram.org/bot487404455:AAFhJLu40DnzAElC7zXfM1hHG1e-14VpsDM/sendMessage?chat_id=' + CHAT_ID + '&text=';
     var utf8 = require('utf8');
     var request = require('request');
