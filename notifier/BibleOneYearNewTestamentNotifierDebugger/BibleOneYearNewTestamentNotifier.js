@@ -87,10 +87,10 @@
 
     request(requestChannelURL + textMessage)
         .on('response', function(response) {
-            (function loop(i, chaptersRequestListLength, chaptersRequestList, requestURL) {
+            (function loop(i, chaptersRequestListLength, chaptersRequestList, requestChannelURL) {
                 if (i < chaptersRequestListLength) new Promise(resolve => {
-                    request(requestURL + utf8.encode(chaptersRequestList[i]));
+                    request(requestChannelURL + utf8.encode(chaptersRequestList[i]));
                     setTimeout(resolve, 3000);
-                }).then(loop.bind(null, i+1, chaptersRequestListLength, chaptersRequestList, requestURL));
-            })(0, chaptersRequestList.length, chaptersRequestList, requestURL);
+                }).then(loop.bind(null, i+1, chaptersRequestListLength, chaptersRequestList, requestChannelURL));
+            })(0, chaptersRequestList.length, chaptersRequestList, requestChannelURL);
     });
