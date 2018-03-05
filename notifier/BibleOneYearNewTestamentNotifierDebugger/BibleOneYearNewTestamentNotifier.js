@@ -1,6 +1,8 @@
     const TEXT_MAX_LENGTH = 3900;
     const CHAT_ID = '-1001099154943'; //https://t.me/joinchat/DwQgSUGDxf_tgC4TcmdeNQ ІБЦ Група Церковної родини
+    const CHANNEL_ID = '-1001160845615'; //https://t.me/NTyearUKR telegram channel
     const requestURL = 'https://api.telegram.org/bot499291228:AAHubvjndSbgxax0PauFpAsmy4XYFz9xRTI/sendMessage?chat_id=' + CHAT_ID + '&text=';
+    const requestChannelURL = 'https://api.telegram.org/bot499291228:AAHubvjndSbgxax0PauFpAsmy4XYFz9xRTI/sendMessage?chat_id=' + CHANNEL_ID + '&text=';
     var utf8 = require('utf8');
     var request = require('request');
     var BibleOneYearNewTestamentPlan = require('./BibleOneYearNewTestamentPlan.json');
@@ -74,6 +76,16 @@
     // console.log(DebugMessage + '\n' + BibleLink + '\n' + chaptersRequestList);
 
     request(requestURL + textMessage)
+        .on('response', function(response) {
+            (function loop(i, chaptersRequestListLength, chaptersRequestList, requestURL) {
+                if (i < chaptersRequestListLength) new Promise(resolve => {
+                    request(requestURL + utf8.encode(chaptersRequestList[i]));
+                    setTimeout(resolve, 3000);
+                }).then(loop.bind(null, i+1, chaptersRequestListLength, chaptersRequestList, requestURL));
+            })(0, chaptersRequestList.length, chaptersRequestList, requestURL);
+    });
+
+    request(requestChannelURL + textMessage)
         .on('response', function(response) {
             (function loop(i, chaptersRequestListLength, chaptersRequestList, requestURL) {
                 if (i < chaptersRequestListLength) new Promise(resolve => {
