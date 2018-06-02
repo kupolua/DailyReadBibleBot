@@ -1,6 +1,6 @@
 var BibleAbbreviationMap = require('./BibleAbbreviationMap');
 
-var getDailyPlan = function(dailyPlanJson) {
+var getDailyPlan = function(dailyPlanJson, dayNumber) {
     var dailyPlan = '';
     let cntBooks = 1;
 
@@ -9,28 +9,30 @@ var getDailyPlan = function(dailyPlanJson) {
             let book = dailyPlanJson[key];
 
             for(var k in book) {
-                // BibleAbbreviationMap.forEach((abbr) => {
-                //     if(abbr[1] == k) {
-                //         dailyPlan += abbr[1] + ' '; //for Ukranian Bible version
-                //     }
-                // });
-
                 dailyPlan += k + ' ';
 
-                book[k].forEach((chapter, i) => {
-                    if(typeof chapter === 'object' && !Array.isArray(chapter)) {
-                        if(i > 0) {dailyPlan += ', '}
-                        for(var chr in chapter) {
-                            if(chapter[chr].length > 1) {
-                                dailyPlan += chr + ':' + chapter[chr][0] + '-' + chapter[chr][chapter[chr].length - 1];
-                            } else {
-                                dailyPlan += chr + ':' + chapter[chr][0];
-                            }
-                        }
-                    } else {
-                        let separator = i < book[k].length - 1 ? ',' : '';
+                book[k].forEach((chapters, i) => {
+                    if(typeof chapters[0] === 'object') {
+                        chapters.forEach((chapter) => {
+                            let separator = i < (book[k].length - 1) ? ', ' : '';
 
-                        dailyPlan += chapter + separator;
+                            if(typeof chapter === 'object') {
+                                for(var id in chapter) {
+                                    if(chapter[id].length === 1) {
+                                        dailyPlan += id + ':' + chapter[id][0] + separator;
+                                    } else {
+                                        dailyPlan += id + ':' + chapter[id][0] + '-' + chapter[id][chapter[id].length - 1] + separator;
+                                    }
+                                }
+                            }
+                            if(typeof chapter === 'string') {
+                                dailyPlan += separator + chapter;
+                            }
+                        });
+                    } else {
+                        let separator = i < book[k].length - 1 ? ', ' : '';
+
+                        dailyPlan += chapters + separator;
                     }
                 });
 
@@ -39,8 +41,12 @@ var getDailyPlan = function(dailyPlanJson) {
             }
         }
     }
+//test
+    // if(dailyPlan.includes("undefined-undefined")) {
+    //     console.log(dayNumber, dailyPlan);
+    // }
 
     return dailyPlan;
-}
+};
 
 module.exports = getDailyPlan;
