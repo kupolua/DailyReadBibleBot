@@ -1,0 +1,30 @@
+{
+  "name": "bible2yearsreading",
+  "version": "1.0.0",
+  "description": "Библія за два роки",
+  "main": "Bible2YearsNotifier.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kupolua/DailyReadBibleBot.git"
+  },
+  "keywords": [
+    "Bible",
+    "reading",
+    "daily",
+    "plan"
+  ],
+  "author": "Pavel Kulakovsky",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kupolua/DailyReadBibleBot/issues"
+  },
+  "homepage": "https://github.com/kupolua/DailyReadBibleBot#readme",
+  "dependencies": {
+    "moment": "^2.23.0",
+    "request": "^2.88.0",
+    "utf8": "^3.0.0"
+  }
+}
